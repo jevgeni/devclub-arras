@@ -1,1 +1,139 @@
 /* This CSS file is created for you to create or override any of the existing CSS styles used in this theme */
+#container .xoxo  {
+    margin:0 10px 0 0;
+}
+
+.widgetcontent .posts-quick .entry-summary{
+    margin-bottom:0;
+}
+.widgetcontent .posts-quick li{
+    margin-bottom:0;
+}
+.widgetcontent .posts-quick .entry-thumbnails{
+    margin-bottom:15px;
+}
+#container .widgetcontainer{
+    padding-bottom:0;
+}
+
+#important .posts-quick{
+    margin-bottom:0;
+}
+
+A.megabutton {
+    padding: 5px 10px;
+    margin: 3px 0;
+    font-size: 12px;
+    background: url(images/feed-title-white.jpg) top repeat-x #EFEFEF;
+    color: #000;
+    text-decoration: none;
+    border: 1px solid #CCC;
+    font-weight: 700;
+    display: inline-block;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+A.megabutton:hover{
+    background: #383332;
+    color: white;
+}
+
+#meeting .posts-quick{
+    min-height:200px;
+    margin:0;
+    position:relative;
+}
+
+#meeting h5{
+    margin-bottom: 0;
+}
+
+#meeting .widgetcontent{
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+#meeting H3{
+    margin:6px 0 0 10px;
+    padding:4px;
+    display:block;
+    float:left;
+    background:rgba(255,255,255,0.9);
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border:1px solid #aaa;
+}
+
+#meeting .buttons A.megabutton{
+    position:absolute;
+    bottom:10px;
+}
+
+#meeting .buttons A.left{
+    left:10px;
+}
+#meeting .buttons A.right{
+    right:10px;
+}
+
+
+.side-links{
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    width:200px;
+    padding:15px;
+    border-left:1px solid #aaa;
+    background:rgba(255,255,255,0.8);
+}
+
+.side-links UL,
+.side-links UL LI
+#jobs UL.half,
+#jobs UL.half LI{
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+.side-links UL LI{
+    padding-bottom:12px;
+}
+
+#jobs .half{
+    width:305px;
+}
+#jobs .left{
+    float:left;
+}
+#jobs .right{
+    float:right;
+}
+.clear{
+    clear:both;
+}
+#jobs .date{
+    float:left;
+}
+#jobs A{
+    display:inline-block;
+    width:230px;
+    padding-left:6px;
+}
+
+#jobs UL.half{
+    margin-left:0;
+}
+#jobs UL.half LI{
+    margin-bottom:5px;
+}
+
+#news A.megabutton{
+    padding:2px 10px;
+}
+
+#news .posts-quick .entry-title,
+#important .posts-quick .entry-title{
+    padding-top:0;
+}

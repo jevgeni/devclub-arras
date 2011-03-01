@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<?php 
+<?php
 $stickies = get_option('sticky_posts');
 rsort($stickies);
 
@@ -16,105 +16,171 @@ $featured2_count 	= (int)arras_get_option('featured2_count');
 $post_blacklist = array();
 ?>
 
-<div id="content" class="section">
-<?php arras_above_content() ?>
 
-<?php if (!$paged) : ?>
+<div id="important" class="section">
+    <?php $sticky = get_option('sticky_posts');
+        $args = array(
+            'posts_per_page' => 1,
+            'post__in' => $sticky
+        );
 
-<?php if ( $featured1_cat !== '' && arras_get_option('enable_featured1') ) : ?>
-<?php arras_above_index_featured1_post() ?>
-<!-- Featured Articles #1 -->
-<div id="index-featured1">
-<?php if ( arras_get_option('featured1_title') != '' ) : ?>
-	<div class="home-title"><?php _e( arras_get_option('featured1_title'), 'arras' ) ?></div>
-<?php endif ?>
-	<?php
-	$query2 = arras_parse_query($featured1_cat, $featured1_count, array_unique($post_blacklist), arras_get_option('featured1_posttype'), arras_get_option('featured1_tax'));
-	arras_render_posts( apply_filters('arras_featured1_query', $query2), arras_get_option('featured1_display'), arras_get_option('featured1_tax') );
-	?>
-</div><!-- #index-featured1 -->
-<?php endif; ?>
+        query_posts($args);
+        
+        if ($sticky[0]) : the_post(); ?>
 
-<?php if ( $featured2_cat !== '' && arras_get_option('enable_featured2') ) : ?>
-<?php arras_above_index_featured2_post() ?>
-<!-- Featured Articles #2 -->
-<div id="index-featured2">
-<?php if ( arras_get_option('featured2_title') != '' ) : ?>
-	<div class="home-title"><?php _e( arras_get_option('featured2_title'), 'arras' ) ?></div>
-<?php endif ?>
-	<?php
-	$query3 = arras_parse_query($featured2_cat, $featured2_count, array_unique($post_blacklist), arras_get_option('featured2_posttype'), arras_get_option('featured2_tax'));
-	arras_render_posts( apply_filters('arras_featured2_query', $query3), arras_get_option('featured2_display'), arras_get_option('featured2_tax') );
-	?>
-</div><!-- #index-featured2 -->
-<?php endif; ?>
+        <ul class="xoxo">
+            <li class="widgetcontainer clearfix">
+                <h5 class="widgettitle">ВАЖНОЕ</h5>
+                <div class="widgetcontent">
+                    <div class="textwidget">
+                        <div id="post-<?php the_ID(); ?>" class="post<?php sticky_class(); ?> posts-quick" >
+                            <div class="entry-thumbnails">
+                                <a href="<?php echo the_permalink(); ?>" class="entry-thumbnails-link">
+                                    <?php echo arras_get_thumbnail() ?>
+                                </a>
+                            </div>
+                            <h3 class="entry-title"><?php the_title(); ?></h3>
+                            <div class="entry-summary">
+                                <div class="entry-info">
+                                    <abbr class="published" title="<?php the_time('c') ?>"><?php printf( __('Posted on %s', 'arras'), get_the_time(get_option('date_format')) ) ?></abbr> | <span><?php comments_number() ?></span>
+                                </div>
+                                <?php the_content(); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
 
-<?php if ( arras_get_option('enable_news') ) : ?>
-<?php arras_above_index_news_post() ?>
-<!-- News Articles -->
-<div id="index-news">
-<?php if ( arras_get_option('news_title') != '' ) : ?>
-<div class="home-title"><?php _e( arras_get_option('news_title') ) ?></div>
-<?php endif ?>
-<?php
-$news_query = arras_parse_query($news_cat, ( (arras_get_option('index_count') == 0 ? get_option('posts_per_page') : arras_get_option('index_count')) ), array_unique($post_blacklist), arras_get_option('news_posttype'), arras_get_option('news_tax'));
-
-$news_query['paged'] = $paged;
-
-query_posts( apply_filters('arras_news_query', $news_query) );
-arras_render_posts( null, arras_get_option('news_display'), arras_get_option('news_tax') ); ?>
-<?php if(function_exists('wp_pagenavi')) wp_pagenavi(); else { ?>
-	<div class="navigation clearfix">
-		<div class="floatleft"><?php next_posts_link( __('Older Entries', 'arras') ) ?></div>
-		<div class="floatright"><?php previous_posts_link( __('Newer Entries', 'arras') ) ?></div>
-	</div>
-<?php } ?>
-
-</div><!-- #index-news -->
-<?php arras_below_index_news_post() ?>
-<?php endif; ?>
-
-<?php $sidebars = wp_get_sidebars_widgets(); ?>
-
-<div id="bottom-content-1">
-	<?php if ( isset($sidebars['sidebar-4']) ) : ?>
-	<ul class="clearfix xoxo">
-    	<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Bottom Content #1') ) : ?>
-		<li></li>
         <?php endif; ?>
-	</ul>
-	<?php endif; ?>
+        <?php wp_reset_query(); ?>
 </div>
 
-<div id="bottom-content-2">
-	<?php if ( isset($sidebars['sidebar-5']) ) : ?>
-	<ul class="clearfix xoxo">
-    	<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Bottom Content #2') ) : ?>
-		<li></li>
-        <?php endif; ?>
-	</ul>
-	<?php endif; ?>
+<div id="meeting" class="section">
+    <ul class="xoxo">
+        <li class="widgetcontainer clearfix">
+            <h5 class="widgettitle">Анонс/Отчет</h5>
+            <?php
+            query_posts( 'category_name=meetings&posts_per_page=1' );
+
+            if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <div class="widgetcontent">
+                    <div class="textwidget">
+                        <?php $bag = wp_get_attachment_image_src( arras_get_first_post_image_id(), array(650,650)); ?>
+                        <div id="post-<?php the_ID(); ?>" class="posts-quick" style="background:url('<?php echo $bag[0]; ?>') no-repeat left top;">
+                            <h3 class="entry-title"><?php the_title(); ?></h3>
+                            <div class="side-links">
+                                <ul>
+                                    <?php
+                                            $key="quick-links";
+                                            $meta = get_post_meta($post->ID, $key, true);
+                                            preg_match_all("((?P<label>[^=\n\r]+)=(?P<url>[^=\n\r]+))",
+                                                           $meta, $out, PREG_SET_ORDER);
+                                            foreach($out as $link): ?>
+                                    <li>
+                                        <a href="<?php echo $link['url']; ?>"><?php echo $link['label'] ?></a>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            <div class="buttons">
+                                <a href="#" class="megabutton left">Прочитать ...</a>
+                                <a href="#" class="megabutton right">Остальные ...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endwhile; endif; ?>
+            <?php wp_reset_query(); ?>
+        </li>
+    </ul>
 </div>
 
-<?php else: ?>
+<div id="jobs" class="section">
 
-<div class="home-title"><?php _e('Latest Headlines', 'arras') ?></div>
+    <ul class="xoxo">
+        <li class="widgetcontainer clearfix">
+            <h5 class="widgettitle">Работа</h5>
 
-<div id="archive-posts">
-	<?php arras_render_posts(null, arras_get_option('archive_display')) ?>    
- 
-	<?php if(function_exists('wp_pagenavi')) wp_pagenavi(); else { ?>
-    	<div class="navigation clearfix">
-			<div class="floatleft"><?php next_posts_link( __('Older Entries', 'arras') ) ?></div>
-			<div class="floatright"><?php previous_posts_link( __('Newer Entries', 'arras') ) ?></div>
-		</div>
-    <?php } ?>
-</div><!-- #archive-posts -->
+            <div class="widgetcontent">
+                <div class="textwidget">
+                    <div class="posts-quick">
+                        <ul class="half left">
+                        <?php
+                            $sticky = get_option('sticky_posts');
+                            $i = 0;
+                            query_posts( 'category_name=jobs&posts_per_page=8' );
+                            if (have_posts()) : while (have_posts()) : the_post();
 
-<?php endif; ?>
+                            if($i == 4):
+                        ?>
+                        </ul>
+                        <ul class="half right">
+                        <?php endif; ?>
+                            <li>
+                                <div class="date"><?php echo get_the_time("d.m.Y"); ?></div>
+                                <a href="#"><?php the_title(); ?></a>
+                            </li>
+                        <?php $i++; endwhile; endif; ?>
+                        </ul>
+                        <div class="clear"></div>
+                        <?php wp_reset_query(); ?>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="news" class="section">
+    <?php $sticky = get_option('sticky_posts');
+    query_posts( 'category_name=news&posts_per_page=10' ); ?>
+
+    <ul class="xoxo">
+        <li class="widgetcontainer clearfix">
+            <h5 class="widgettitle">Новости</h5>
+            <div class="widgetcontent">
+                <div class="textwidget">
+                    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+
+                    <div id="post-<?php the_ID(); ?>" class="post<?php sticky_class(); ?> posts-quick" >
+                        <div class="entry-thumbnails">
+                            <a href="<?php echo the_permalink(); ?>" class="entry-thumbnails-link">
+                                <?php echo arras_get_thumbnail() ?>
+                            </a>
+                        </div>
+                        <h3 class="entry-title"><?php the_title(); ?></h3>
+                        <div class="entry-summary">
+                            <div class="entry-info">
+                                <abbr class="published" title="<?php the_time('c') ?>">
+                                    <?php echo get_the_time("d.m.Y"); ?></abbr> |
+                                <abbr title="tags">
+                                <?php $posttags = get_the_tags(); if ($posttags): foreach($posttags as $tag): ?>
+                                <a href="#<?php echo $tag->slug;?>"><?php echo $tag->name; ?></a>
+                                <?php endforeach; endif; ?>
+                                    </abbr> |
+                                <abbr title="category">
+                                    <?php $postcats = get_the_category(); if ($postcats): foreach($postcats as $cat): ?>
+                                <a href="#<?php echo $cat->cat_ID;?>"><?php echo $cat->cat_name; ?></a>
+                                <?php endforeach; endif; ?>
+                                    </abbr>
+                            </div>
+                            <?php the_excerpt(); ?>
+                            <a href="<?php echo the_permalink(); ?>" class="megabutton">Далее ... </a> <a href="#"  class="megabutton"><?php comments_number() ?></a>
+                        </div>
+                    </div>
+                    <?php endwhile; endif; ?>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <?php wp_reset_query(); ?>
+</div>
+
+<!-- end of devclub customization -->
+
 
 <?php arras_below_content() ?>
-</div><!-- #content -->
-    
+
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
