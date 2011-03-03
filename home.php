@@ -59,7 +59,7 @@ $post_blacklist = array();
 <div id="meeting" class="section">
     <ul class="xoxo">
         <li class="widgetcontainer clearfix">
-            <h5 class="widgettitle">Анонс/Отчет</h5>
+            <h5 class="widgettitle">ВСТРЕЧИ</h5>
             <?php
             query_posts( 'category_name=meetings&posts_per_page=1' );
 
@@ -106,7 +106,11 @@ $post_blacklist = array();
 
     <ul class="xoxo">
         <li class="widgetcontainer clearfix">
-            <h5 class="widgettitle">Работа</h5>
+            <?php
+                $jobs_category = get_category_by_slug("jobs");
+                $jobs_link = get_category_link($jobs_category->term_id);
+            ?>
+            <h5 class="widgettitle"><a href="<?php echo $jobs_link ?>">РАБОТА</a></h5>
 
             <div class="widgetcontent">
                 <div class="textwidget">
@@ -125,7 +129,7 @@ $post_blacklist = array();
                         <?php endif; ?>
                             <li>
                                 <div class="date"><?php echo get_the_time("d.m.Y"); ?></div>
-                                <a href="#"><?php the_title(); ?></a>
+                                <a href="<?php echo the_permalink(); ?>"><?php the_title(); ?></a>
                             </li>
                         <?php $i++; endwhile; endif; ?>
                         </ul>
@@ -162,17 +166,17 @@ $post_blacklist = array();
                                     <?php echo get_the_time("d.m.Y"); ?></abbr> |
                                 <abbr title="tags">
                                 <?php $posttags = get_the_tags(); if ($posttags): foreach($posttags as $tag): ?>
-                                <a href="#<?php echo $tag->slug;?>"><?php echo $tag->name; ?></a>
+                                <a href="<?php echo get_tag_link($tag->term_id); ?>"><?php echo $tag->name; ?></a>
                                 <?php endforeach; endif; ?>
                                     </abbr> |
                                 <abbr title="category">
                                     <?php $postcats = get_the_category(); if ($postcats): foreach($postcats as $cat): ?>
-                                <a href="#<?php echo $cat->cat_ID;?>"><?php echo $cat->cat_name; ?></a>
+                                <a href="<?php echo get_category_link($cat->cat_ID);?>"><?php echo $cat->cat_name; ?></a>
                                 <?php endforeach; endif; ?>
                                     </abbr>
                             </div>
                             <?php the_excerpt(); ?>
-                            <a href="<?php echo the_permalink(); ?>" class="megabutton">Далее ... </a> <a href="#"  class="megabutton"><?php comments_number() ?></a>
+                            <a href="<?php echo the_permalink(); ?>" class="megabutton">Далее ... </a> <a href="<?php comments_link(); ?>"  class="megabutton"><?php comments_number() ?></a>
                         </div>
                     </div>
                     <?php endwhile; endif; ?>
