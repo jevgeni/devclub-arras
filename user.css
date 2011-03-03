@@ -14,10 +14,21 @@
 }
 #container .widgetcontainer{
     padding-bottom:0;
+
 }
 
 #important .posts-quick{
     margin-bottom:0;
+}
+
+#important .widgetcontainer {
+    border-color: maroon;
+    background-color: #fffff0;
+}
+
+#important .widgettitle {
+    border-bottom-color: maroon;
+    color: maroon;
 }
 
 A.megabutton {
