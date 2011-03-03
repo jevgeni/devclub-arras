@@ -68,7 +68,7 @@ $post_blacklist = array();
                     <div class="textwidget">
                         <?php $bag = wp_get_attachment_image_src( arras_get_first_post_image_id(), array(650,650)); ?>
                         <div id="post-<?php the_ID(); ?>" class="posts-quick" style="background:url('<?php echo $bag[0]; ?>') no-repeat left top;">
-                            <h3 class="entry-title"><?php the_title(); ?></h3>
+                            <h3 class="entry-title"><a href="<?php echo the_permalink(); ?>"><?php the_title(); ?></a></h3>
                             <div class="side-links">
                                 <ul>
                                     <?php
@@ -84,8 +84,14 @@ $post_blacklist = array();
                                 </ul>
                             </div>
                             <div class="buttons">
-                                <a href="#" class="megabutton left">Прочитать ...</a>
-                                <a href="#" class="megabutton right">Остальные ...</a>
+
+                                <a href="<?php echo the_permalink(); ?>" class="megabutton left">Прочитать ...</a>
+                                <?php
+                                $meetings_category = get_category_by_slug("meetings");
+                                $meetings_link = get_category_link($meetings_category->term_id);
+
+                                ?>
+                                <a href="<?php echo $meetings_link ?>" class="megabutton right">Остальные ...</a>
                             </div>
                         </div>
                     </div>
