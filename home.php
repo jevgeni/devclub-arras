@@ -42,7 +42,7 @@ $post_blacklist = array();
                             <h3 class="entry-title"><?php the_title(); ?></h3>
                             <div class="entry-summary">
                                 <div class="entry-info">
-                                    <abbr class="published" title="<?php the_time('c') ?>"><?php printf( __('Posted on %s', 'arras'), get_the_time(get_option('date_format')) ) ?></abbr> | <span><?php comments_number() ?></span>
+                                    <abbr class="published" title="<?php the_time('c') ?>"><?php printf( __('Posted on %s', 'arras'), get_the_time(get_option('date_format')) ) ?></abbr> | <a href="<?php comments_link(); ?>"><span><?php comments_number() ?></span></a>
                                 </div>
                                 <?php the_content(); ?>
                             </div>

@@ -6,7 +6,7 @@
 <?php arras_above_sidebar() ?>  
 	<ul class="xoxo">
 		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Primary Sidebar') ) : ?>
-			<li class="widgetcontainer clearfix">
+			<?php /* <li class="widgetcontainer clearfix">
 				<h5 class="widgettitle"><?php _e('Welcome to Arras!', 'arras') ?></h5>
 				<div class="widgetcontent">
 				<div class="textwidget">
@@ -31,7 +31,7 @@
 				endif;
 ?>
 				</div>
-			</li>
+			</li>*/?>
 			<li class="widgetcontainer clearfix">
 				<h5 class="widgettitle"><?php _e('Tag Cloud', 'arras') ?></h5>
 				<div class="tags widgetcontent">
