@@ -4,7 +4,7 @@
 /* globals */
 body					{ background-color: #F0F0F0; color: #333; font: 12px 'Lucida Grande',Arial,Helvetica,sans-serif;}
 
-a, a:link, a:visited	{ color: #313428; text-decoration: none; }
+a, a:link, a:visited	{ color: #313428;}
 a:hover					{ color: #CC0000; }
 
 blockquote				{ border-left: 2px solid #CCC; color: #666; padding: 5px 10px 1px; margin: 10px; font-style: normal; }
