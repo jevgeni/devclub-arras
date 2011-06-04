@@ -30,7 +30,7 @@ $post_blacklist = array();
 
         <ul class="xoxo">
             <li class="widgetcontainer clearfix">
-                <h5 class="widgettitle">ВАЖНОЕ</h5>
+                <h5 class="widgettitle"><?php _e('Important', 'arras') ?></h5>
                 <div class="widgetcontent">
                     <div class="textwidget">
                         <div id="post-<?php the_ID(); ?>" class="post<?php sticky_class(); ?> posts-quick" >
@@ -59,7 +59,7 @@ $post_blacklist = array();
 <div id="meeting" class="section">
     <ul class="xoxo">
         <li class="widgetcontainer clearfix">
-            <h5 class="widgettitle">ВСТРЕЧИ</h5>
+            <h5 class="widgettitle"><?php _e('Meetings', 'arras') ?></h5>
             <?php
             query_posts( 'category_name=meetings&posts_per_page=1' );
 
@@ -85,13 +85,13 @@ $post_blacklist = array();
                             </div>
                             <div class="buttons">
 
-                                <a href="<?php echo the_permalink(); ?>" class="megabutton left">Прочитать ...</a>
+                                <a href="<?php echo the_permalink(); ?>" class="megabutton left"><?php _e('Read ...', 'arras') ?></a>
                                 <?php
                                 $meetings_category = get_category_by_slug("meetings");
                                 $meetings_link = get_category_link($meetings_category->term_id);
 
                                 ?>
-                                <a href="<?php echo $meetings_link ?>" class="megabutton right">Остальные ...</a>
+                                <a href="<?php echo $meetings_link ?>" class="megabutton right"><?php _e('Other ...', 'arras') ?></a>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ $post_blacklist = array();
                 $jobs_category = get_category_by_slug("jobs");
                 $jobs_link = get_category_link($jobs_category->term_id);
             ?>
-            <h5 class="widgettitle"><a href="<?php echo $jobs_link ?>">РАБОТА</a></h5>
+            <h5 class="widgettitle"><a href="<?php echo $jobs_link ?>"><?php _e('Job', 'arras') ?></a></h5>
 
             <div class="widgetcontent">
                 <div class="textwidget">
@@ -148,7 +148,7 @@ $post_blacklist = array();
 
     <ul class="xoxo">
         <li class="widgetcontainer clearfix">
-            <h5 class="widgettitle">Новости</h5>
+            <h5 class="widgettitle"><?php _e('News', 'arras') ?></h5>
             <div class="widgetcontent">
                 <div class="textwidget">
                     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
@@ -176,7 +176,7 @@ $post_blacklist = array();
                                     </abbr>
                             </div>
                             <?php the_excerpt(); ?>
-                            <a href="<?php echo the_permalink(); ?>" class="megabutton">Далее ... </a> <a href="<?php comments_link(); ?>"  class="megabutton"><?php comments_number() ?></a>
+                            <a href="<?php echo the_permalink(); ?>" class="megabutton"><?php _e('More ...', 'arras') ?></a> <a href="<?php comments_link(); ?>"  class="megabutton"><?php comments_number() ?></a>
                         </div>
                     </div>
                     <?php endwhile; endif; ?>
