@@ -150,6 +150,9 @@ function arras_body_class() {
 	}
 }
 
+/**
+ * Use arras_featured_loop() for front page loops.
+ */
 function arras_render_posts($args = null, $display_type = 'default', $taxonomy = 'category') {
 	global $post, $wp_query, $arras_tapestries;
 	
@@ -164,6 +167,97 @@ function arras_render_posts($args = null, $display_type = 'default', $taxonomy =
 	}
 	
 	wp_reset_query();
+}
+
+function arras_featured_loop( $display_type = 'default', $arras_args = array(), $query_posts = false ) {
+	global $wp_query;
+
+	if ($query_posts) {
+		$q = $wp_query;
+	} else {
+		$arras_args = arras_prep_query($arras_args);
+		$q = new WP_Query($arras_args);
+	}
+	
+	if ($q->have_posts()) {
+		if ( !isset($arras_args['taxonomy']) ) $arras_args['taxonomy'] = 'category';
+		arras_get_tapestry_callback($display_type, $q, $arras_args['taxonomy']);
+	}
+	
+	wp_reset_query();
+}
+
+/**
+ * This function replaces arras_parse_query() starting from 1.5.1.
+ */
+function arras_prep_query( $args = array() ) {
+	$_defaults = array(
+		'list'				=> array(),
+		'taxonomy'			=> 'category',
+
+		'query'				=> array(
+			'exclude'			=> array(),
+			'post_type'			=> 'post',
+			'posts_per_page'	=> 10,
+			'orderby'			=> 'date',
+			'order'				=> 'DESC'
+		)
+	);
+	
+	$args['query'] = wp_parse_args($args['query'], $_defaults['query']);
+	$args = wp_parse_args($args, $_defaults);
+
+	if ( !is_array($args['list']) ) {
+		$args['list'] = array($args['list']);
+	}
+	
+	// sticky posts
+	if ( in_array('-5', $args['list']) ) {
+		$stickies = get_option('sticky_posts');
+		rsort($stickies);
+		if ( count($stickies) > 0 ) {
+			$args['query']['post__in'] = $stickies;
+		} else {
+			// if no sticky posts are available, return empty value
+			return false;
+		}
+		
+		$key = array_search('-5', $args['list']);
+		unset($args['list'][$key]);
+	}
+	
+	// taxonomies
+	switch( $args['taxonomy'] ) {
+		case 'category':
+
+			$zero_key = array_search('0', $args['list']);
+			if (is_numeric($zero_key)) unset($args['list'][$zero_key]);
+			
+			$args['query']['category__in'] = $args['list'];
+			break;
+			
+		case 'post_tag':
+			$args['query']['tag__in'] = $args['list'];
+			break;
+			
+		default:
+			$taxonomy_obj = get_taxonomy($args['taxonomy']);
+			
+			$args['list'] = implode($args['list'], ',');
+			$args['query'][$taxonomy_obj->query_var] = $args['list'];
+	}
+	
+
+	if (is_home() && arras_get_option('hide_duplicates')) {
+		$args['query']['post__not_in'] = array_unique($args['query']['exclude']);
+	}
+	
+	if ($args['query']['post_type'] == 'attachment') {
+		$args['query']['post_status'] = 'inherit';
+	}
+	
+	//arras_debug($args['query']);
+	return $args['query'];
 }
 
 function arras_list_trackbacks($comment, $args, $depth) {
@@ -236,58 +330,6 @@ function arras_excerpt_length($length) {
 }
 add_filter('excerpt_length', 'arras_excerpt_length');
 
-function arras_parse_query($list, $count, $exclude = null, $post_type = '', $taxonomy = '') {
-	$query = array();
-	
-	if ($post_type == '') $post_type = 'post';
-	if ($taxonomy == '') $taxonomy = 'category';
-	
-	if ($list != false) {
-		if ((array)$list !== $list) {
-			$list = array($list);
-		}
-		
-		if ( in_array('-5', $list) ) {
-			$stickies = get_option('sticky_posts');
-			rsort($stickies);
-			if (count($stickies) > 0) {
-				$query['post__in'] = $stickies;
-			} else {
-				// if no sticky posts are available, return empty value
-				return false;
-			}
-		
-			$key = array_search('-5', $list);
-			unset($list[$key]);
-		}
-	
-		switch($taxonomy) {
-			case 'category':
-				if ( ($zero_cat = array_search('0', $list)) === true )
-					unset($list[$zero_cat]);
-					
-				$query['category__in'] = $list;
-				break;
-			case 'post_tag':
-				$query['tag__in'] = $list;
-				break;
-			default:
-				$list = implode($list, ',');
-				$query[$taxonomy] = $list;
-		}
-
-	}
-	
-	$query['post_type'] = $post_type;
-	$query['posts_per_page'] = $count;
-	
-	if (is_home() && arras_get_option('hide_duplicates')) {
-		$query['post__not_in'] = $exclude;
-	}
-
-	//print_r($query);
-	return $query;
-}
 
 function arras_social_nav() {
 	$feed = arras_get_option('feed_url');
@@ -340,6 +382,12 @@ function arras_nav_fallback_cb() {
 	echo '<ul class="sf-menu menu clearfix">';
 	wp_list_categories('hierarchical=1&orderby=id&hide_empty=1&title_li=');	
 	echo '</ul>';
+}
+
+function arras_debug($exp) {
+	//if (current_user_can('manage_options')) {
+		echo '<pre><code style="max-height: 200px; overflow: scroll">' . htmlentities( print_r($exp, true) ) . '</code></pre>';
+	//}
 }
 
 /* End of file template.php */

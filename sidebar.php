@@ -6,7 +6,7 @@
 <?php arras_above_sidebar() ?>  
 	<ul class="xoxo">
 		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Primary Sidebar') ) : ?>
-			<?php /* <li class="widgetcontainer clearfix">
+            <?php /* <li class="widgetcontainer clearfix">
 				<h5 class="widgettitle"><?php _e('Welcome to Arras!', 'arras') ?></h5>
 				<div class="widgetcontent">
 				<div class="textwidget">

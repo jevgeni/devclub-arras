@@ -54,7 +54,7 @@ function arras_remove_all_tapestries() {
  * @since 1.4.4
  */
 function arras_get_tapestry_callback($type, $query, $taxonomy = 'category') {
-	global $arras_tapestries;
+	global $arras_tapestries, $wp_query, $post;
 	
 	if ( count($arras_tapestries) == 0 ) return false;
 	
@@ -68,6 +68,11 @@ function arras_get_tapestry_callback($type, $query, $taxonomy = 'category') {
 	echo $tapestry->before;
 	while ($query->have_posts()) {
 		$query->the_post();
+		
+		// hack for plugin authors who love to use $post = $wp_query->post
+		$wp_query->post = $query->post;
+		setup_postdata($post);
+		
 		call_user_func_array( $tapestry->callback, array($dep = '', $taxonomy) );
 		if ($tapestry->allow_duplicates) arras_blacklist_duplicates();
 	}
@@ -83,7 +88,7 @@ if (!function_exists('arras_tapestry_traditional')) {
 		?>
 		<div <?php arras_single_post_class() ?>>
 			<?php arras_postheader() ?>
-			<div class="entry-content clearfix"><?php the_content( __('<p>Read the rest of this entry &raquo;</p>', 'arras') ); ?></div>
+			<div class="entry-content clearfix"><?php the_content( __('Read the rest of this entry &raquo;', 'arras') ); ?></div>
 			<?php arras_postfooter() ?>
 		</div>
 		<?php
@@ -106,7 +111,7 @@ if (!function_exists('arras_tapestry_line')) {
 			<span class="entry-cat">
 				<?php 
 				$terms = get_the_terms( get_the_ID(), $taxonomy );
-				if ( !is_wp_error($terms) ) {
+				if ( $terms != '' && !is_wp_error($terms) ) {
 					$terms = array_values($terms);
 					if (arras_get_option('news_cat') && isset($terms[1])) echo $terms[1]->name;
 					else echo $terms[0]->name;
@@ -115,7 +120,7 @@ if (!function_exists('arras_tapestry_line')) {
 			</span>
 			
 			<h3 class="entry-title"><a rel="bookmark" href="<?php the_permalink() ?>" title="<?php printf( __('Permalink to %s', 'arras'), get_the_title() ) ?>"><?php the_title() ?></a></h3>
-			<span class="entry-comments"><?php comments_number() ?></span>
+			<a class="entry-comments" href="<?php comments_link() ?>"><?php comments_number() ?></a>
 		</li>
 		<?php
 	}
@@ -245,7 +250,7 @@ if (!function_exists('arras_tapestry_quick')) {
 			<?php echo apply_filters('arras_tapestry_quick_postheader', arras_generic_postheader('quick-preview') ) ?>
 			<div class="entry-summary">
 				<div class="entry-info">
-					<abbr class="published" title="<?php the_time('c') ?>"><?php printf( __('Posted on %s', 'arras'), get_the_time(get_option('date_format')) ) ?></abbr> | <span><?php comments_number() ?></span>
+					<abbr class="published" title="<?php the_time('c') ?>"><?php printf( __('Posted on %s', 'arras'), get_the_time(get_option('date_format')) ) ?></abbr> | <a href="<?php comments_link() ?>"><?php comments_number() ?></a>
 				</div>
 				<?php echo get_the_excerpt() ?>
 				<p class="quick-read-more"><a href="<?php the_permalink() ?>" title="<?php printf( __('Permalink to %s', 'arras'), get_the_title() ) ?>">
