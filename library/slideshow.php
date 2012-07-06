@@ -1,14 +1,23 @@
 <?php 
 
 function arras_add_slideshow() {
-	global $post_blacklist;
-	if (!is_home()) return false;
-	
+	global $post_blacklist, $paged;
+	if ( !is_home() || $paged ) return false;
+
 	$slideshow_cat = arras_get_option('slideshow_cat');
 	
 	if (arras_get_option('enable_slideshow') == false) return false;
-	
-	$query = arras_parse_query($slideshow_cat, arras_get_option('slideshow_count'), array_unique($post_blacklist), arras_get_option('slideshow_posttype'), arras_get_option('slideshow_tax'));
+
+	$query = arras_prep_query( array(
+		'list'				=> $slideshow_cat,
+		'taxonomy'			=> arras_get_option('slideshow_tax'),
+		'query'				=> array(
+			'posts_per_page'	=> arras_get_option('slideshow_count'),
+			'exclude'			=> $post_blacklist,
+			'post_type'			=> arras_get_option('slideshow_posttype'),
+			'paged'				=> $paged
+		)
+	) );
 	
 	$q = new WP_Query( apply_filters('arras_slideshow_query', $query) );
 	if ($q->have_posts()) :
@@ -59,7 +68,7 @@ $('#featured-slideshow').cycle({
 	timeout: 6000,
 	pause: 1,
 	slideExpr: '.featured-slideshow-inner',
-	height: '<?php $size = arras_get_image_size('featured-slideshow-thumb'); echo $size['h']; ?>px'
+	height: '<?php echo $size['h']; ?>px'
 });
 <?php endif ?>
 	
@@ -73,11 +82,11 @@ function arras_add_slideshow_thumb_size() {
 	$layout = arras_get_option('layout');
 	
 	if ( strpos($layout, '1c') !== false ) {
-		$size = array(950, 300);
-	} else if ( strpos($layout, '3c') !== false ) {
+		$size = array(950, 450);
+	} else if ( preg_match('/3c/', $layout) ) {
 		$size = array(490, 225);
 	} else {
-		$size = array(640, 250);
+		$size = array(640, 300);
 	}
 	
 	$size = apply_filters('arras_slideshow_thumb_size', $size);
