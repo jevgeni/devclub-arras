@@ -46,16 +46,6 @@ function arras_layout_styles() {
 	<?php
 }
 
-function arras_add_blueprint_css() {
-	echo '
-	<link rel="stylesheet" href="' . get_bloginfo('template_url') . '/css/blueprint/screen.css" type="text/css" media="screen,projection" />
-	<link rel="stylesheet" href="' . get_bloginfo('template_url') . '/css/blueprint/print.css" type="text/css" media="print" />
-	<!--[if IE 6]>
-	<link rel="stylesheet" href="' . get_bloginfo('template_url') . '/css/blueprint/ie.css" type="text/css" media="screen,projection" />
-	<![endif]-->
-	';
-}
-
 function arras_add_layout_css() {
 	global $arras_registered_alt_layouts;
 	

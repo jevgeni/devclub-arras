@@ -1,33 +1,33 @@
 <?php
 $forum_contributors = array(
 	'Giovanni' => 'http://www.animeblog.nl/',
-	'dgodfather' => 'http://trusupremekillaz.com/tskgaming',
+	'Bobby Clapp' => 'http://profaneentertainment.com/gaming',
 	'Charles' => 'http://www.claireraborar.com/travel',
 	'Nedrago' => 'http://www.nedrago.com/',
 	'Dan' => 'http://www.techunfolding.com/'
 );
 $translators = array(
-	'Celso Azevedo (Portuguese)' => '',
-	'Nolog (French)' => 'http://pookiecookie.fr/',
-	'kokaz84 (French)' => 'http://micromanga.free.fr/',
-	'er_mejor (Spanish)' => 'http://www.teusoft.com/',
-	'AddVariety (Dutch)' => 'http://www.addvariety.com/',
-	'Fredik Arvidsson (Swedish)' => 'http://www.fredrikarvidsson.com/',
-	'Michael Wenzl (German)' => 'http://www.michaelwenzl.de/',
-	'Michalis Pissas (Greek)' => '',
-	'chaibi (Norwegian)' => '',
-	'cngamers (Chinese)' => '',
-	'lesta (Romanian)' => ''
+	'Bestmoose (Dutch)' => 'http://www.arrastheme.com/forums/topic3369-1501-german-translation-deutsche-uebersetzung.html',
+	'Drun Ming Haung (Traditional Chinese)' => 'http://www.arrastheme.com/forums/topic2956-1501-chinese-traditional-translation-zhtw.html',
+	'carlosmarchi (Brazilian Portuguese)' => 'http://www.arrastheme.com/forums/topic3401-1501-brazilian-portuguese-ptbr-pack.html',
+	'PressPlay (Norwegian)' => 'http://www.arrastheme.com/forums/topic3736-1501-norwegian-nb-translation-norsk-bokmal-oversettingnbno.html',
+	'Bob Robot (Simplified Chinese)' => 'http://www.arrastheme.com/forums/topic4412-1501-simplified-chinese-translation-zhcn.html',
+	'edvind (Swedish)' => 'http://www.arrastheme.com/forums/topic3627-1501-swedish-translation-svensk-oeversaettning.html',
+	'Celso Azevedo (Portuguese)' => 'http://www.arrastheme.com/forums/topic3658-1501-portuguese-portugal-translation-traducao-portuguesa.html',
+	'Sokac (Croatian)' => 'http://www.arrastheme.com/forums/topic3219-1501-croatian-translation-hrvatski-prijevod.html',
+	'Berniru (Russian)' => 'http://www.arrastheme.com/forums/topic3202-1501-russkii-perevod-russian-translation.html',
+	'vicsabi (Hungarian)' => 'http://www.arrastheme.com/forums/topic6561-1501-hungarian-translation-magyar-forditas.html',
+	'vfenix (Spanish)' => 'http://www.arrastheme.com/forums/topic3549-1501-spanish-translation-traduccion-espanola.html'
 );
 $notices = ''; // store notices here so that options_page.php will echo it out later
 
 function arras_addmenu() {
-	$options_page = add_menu_page( '', __('Arras', 'arras'), 'switch_themes', 'arras-options', 'arras_admin', get_template_directory_uri() . '/images/icon.png', 63);
-	add_submenu_page( 'arras-options', __('Arras Options', 'arras'), __('Theme Options', 'arras'), 'switch_themes', 'arras-options', 'arras_admin' );
+	$options_page = add_menu_page( '', __('Arras', 'arras'), 'edit_theme_options', 'arras-options', 'arras_admin', get_template_directory_uri() . '/images/icon.png', 63);
+	add_submenu_page( 'arras-options', __('Arras Options', 'arras'), __('Theme Options', 'arras'), 'edit_theme_options', 'arras-options', 'arras_admin' );
 	
-	$posttax_page = add_submenu_page( 'arras-options', __('Post Types & Taxonomies', 'arras'), __('Post Types & Tax.', 'arras'), 'switch_themes', 'arras-posttax', 'arras_posttax' );
+	$posttax_page = add_submenu_page( 'arras-options', __('Post Types & Taxonomies', 'arras'), __('Post Types & Tax.', 'arras'), 'edit_theme_options', 'arras-posttax', 'arras_posttax' );
 	
-	$custom_background_page = add_submenu_page( 'arras-options', __('Custom Background', 'arras'), __('Custom Background', 'arras'), 'switch_themes', 'arras-custom-background', 'arras_custom_background' );
+	$custom_background_page = add_submenu_page( 'arras-options', __('Custom Background', 'arras'), __('Custom Background', 'arras'), 'edit_theme_options', 'arras-custom-background', 'arras_custom_background' );
 
 	add_action('admin_print_scripts-'. $options_page, 'arras_admin_scripts');
 	add_action('admin_print_styles-'. $options_page, 'arras_admin_styles');
@@ -70,7 +70,7 @@ function arras_admin() {
 			
 			echo '<div class="wrap clearfix">';
 			screen_icon('themes');
-			?> <h2 id="arras-header"><?php _e('Arras Theme Options', 'arras') ?></h2> <?php
+			?> <h2 id="arras-header"><?php _e('Arras Options', 'arras') ?></h2> <?php
 			arras_regen_thumbs_process();
 			echo '</div>';
 			
@@ -195,9 +195,9 @@ function arras_posttax() {
 }
 
 function arras_admin_scripts() {
-	wp_enqueue_script('jquery-ui-custom', get_template_directory_uri() . '/js/jquery-ui-1.8.2.custom.min.js', null, 'jquery');
-	wp_enqueue_script('arras-admin-js', get_template_directory_uri() . '/js/admin.js');
-	wp_enqueue_script('jquery-multiselect', get_template_directory_uri() . '/js/jquery.multiselect.min.js', null, 'jquery');
+	wp_enqueue_script( 'jquery-ui-progressbar', get_template_directory_uri() . '/js/jquery.ui.progressbar.min.js', array('jquery', 'jquery-ui-core', 'jquery-ui-widget') );
+	wp_enqueue_script( 'jquery-multiselect', get_template_directory_uri() . '/js/jquery.multiselect.min.js', null, 'jquery' );
+	wp_enqueue_script( 'arras-admin-js', get_template_directory_uri() . '/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-tabs') );
 }
 
 function arras_admin_styles() {
@@ -264,17 +264,6 @@ function arras_right_col() {
 			</ul>
 		</div>
 		
-		<div class="postbox">
-			<h3><span><?php _e('Recommended Plugins', 'arras') ?></span></h3>
-			<ul>
-				<li><a href="http://lesterchan.net/portfolio/programming/php/#wp-pagenavi">WP-PageNavi</a></li>
-				<li><a href="http://blog.moskis.net/downloads/plugins/fancybox-for-wordpress/">FancyBox for WordPress</a></li>
-				<li><a href="http://sexybookmarks.net/">SexyBookmarks</a></li>
-				<li><a href="http://mitcho.com/code/yarpp/">Yet Another Related Posts Plugin</a></li>
-				<li><a href="http://www.dev4press.com/plugins/gd-taxonomies-tools/">GD Custom Posts &amp; Taxonomies Tools</a></li>
-			</ul>
-		</div>
-		
 		<?php if ( !arras_get_option('donate') ) : ?>
 		<div class="postbox">
 			<h3><span><?php _e('How to Support?', 'arras') ?></span></h3>
@@ -317,6 +306,38 @@ function arras_posttype_blacklist() {
 function arras_taxonomy_blacklist() {
 	$_default = array();
 	return apply_filters('arras_taxonomy_blacklist', $_default);
+}
+
+function arras_admin_bar() {
+	global $wp_admin_bar;
+	
+	if ( !current_user_can('edit_theme_options') || is_network_admin() )
+		return;
+	
+	$wp_admin_bar->add_menu( array(
+		'id'	=> 'arras-admin-menu',
+		'title' => __('Arras', 'arras'),
+		'href'	=> get_admin_url('', 'admin.php?page=arras-options')
+	) );
+	
+	$wp_admin_bar->add_menu( array(
+		'parent'	=> 'arras-admin-menu',
+		'title'		=> __('Theme Options', 'arras'),
+		'href'		=> get_admin_url('', 'admin.php?page=arras-options')
+	) );
+	
+	$wp_admin_bar->add_menu( array(
+		'parent'	=> 'arras-admin-menu',
+		'title'		=> __('Post Types & Tax.', 'arras'),
+		'href'		=> get_admin_url('', 'admin.php?page=arras-posttax')
+	) );
+	
+	$wp_admin_bar->add_menu( array(
+		'parent'	=> 'arras-admin-menu',
+		'title'		=> __('Custom Background', 'arras'),
+		'href'		=> get_admin_url('', 'admin.php?page=arras-custom-background')
+	) );
+	
 }
 
 /* End of file admin.php */
